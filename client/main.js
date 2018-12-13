@@ -50,7 +50,7 @@ Template.addNote.events ({
 			username: Meteor.user().username
 		});
 		*/
-		Meteor.call('note.insert', text);
+		Meteor.call('notes.insert', text);
 		
 		//clears form after submit
 		target.text.value='';
