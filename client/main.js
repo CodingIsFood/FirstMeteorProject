@@ -11,19 +11,11 @@ Accounts.ui.config ({
 
 });
 
+Meteor.subscribe('notes');
 
 Template.body.helpers({
 
-	/*
-	notes: [
-    {text: 'note 1'},
-    {text: 'note 2'},
-    {text: 'note 3'}
-	]
-	*/
-
 	notes() {
-
 		return Notes.find({});
 	}
 });
@@ -37,19 +29,7 @@ Template.addNote.events ({
 	const target=event.target;
 	const text=target.text.value;
 
-	/* 
-	    prints the value to console
-		console.log(text);
-		*/
-
-		/*inserts the value into collection
-		Notes.insert({
-			text,
-			createdAt: new Date(),
-			owner: Meteor.userId(),
-			username: Meteor.user().username
-		});
-		*/
+	
 		Meteor.call('notes.insert', text);
 		
 		//clears form after submit
@@ -65,9 +45,24 @@ Template.addNote.events ({
 //deletes an entry from collection after delete is clicked 
 Template.note.events ({
 	'click .delete-note': function(){
-		//Notes.remove(this._id);
-		Meteor.call('notes.remove', this);
+		if (confirm("Are you sure you want to delete this note?")){
+
+         Meteor.call('notes.remove', this, function (error, result){
+         	if (error) {
+         		alert("You didn't create the note, so you can't delete it!");
+         	}
+         	else {
+         		alert("Entry has been deleted!");
+         	}
+         });
+    }
 		return false;
 	}
 });
+
+
+
+
+
+
 
